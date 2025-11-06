@@ -1,0 +1,12 @@
+{
+	"name": "sdfc-loans",
+	"private": true,
+	"workspaces": [
+		"backend",
+		"frontend"
+	],
+	"scripts": {
+		"back": "bun run --filter '@sdfc-loans/backend' dev",
+		"front": "bun run --filter '@sdfc-loans/frontend' dev"
+	}
+}
