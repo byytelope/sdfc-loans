@@ -1,3 +1,3 @@
 export default async function Home() {
-  return <p>Yo</p>;
+  return <p className="text-5xl">Yo</p>;
 }

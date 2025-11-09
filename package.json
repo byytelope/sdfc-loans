@@ -1,12 +1,16 @@
 {
-	"name": "sdfc-loans",
-	"private": true,
-	"workspaces": [
-		"backend",
-		"frontend"
-	],
-	"scripts": {
-		"back": "bun run --filter '@sdfc-loans/backend' dev",
-		"front": "bun run --filter '@sdfc-loans/frontend' dev"
-	}
+  "name": "sdfc-loans",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend",
+    "shared"
+  ],
+  "scripts": {
+    "backend": "bun run --filter '@sdfc-loans/backend' dev",
+    "frontend": "bun run --filter '@sdfc-loans/frontend' dev"
+  },
+  "dependencies": {
+    "zod": "^4.1.12"
+  }
 }

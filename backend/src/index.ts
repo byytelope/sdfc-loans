@@ -1,9 +1,21 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
+import { logger } from "hono/logger";
 
-const app = new Hono();
+import { loans } from "./routes/loans";
 
-app.get("/", (c) => {
-	return c.text("Hello Hono!");
-});
+const app = new Hono({ strict: false });
+const v1 = new Hono();
 
-export default app;
+v1.route("/loans", loans);
+
+app.use(logger());
+app.use(cors());
+
+app.get("/", (c) => c.text("API running"));
+app.route("/api/v1", v1);
+
+export default {
+  port: 3500,
+  fetch: app.fetch,
+};

@@ -1,12 +1,15 @@
 {
-	"name": "@sdfc-loans/backend",
-	"scripts": {
-		"dev": "bun run --hot src/index.ts"
-	},
-	"dependencies": {
-		"hono": "^4.10.4"
-	},
-	"devDependencies": {
-		"@types/bun": "latest"
-	}
+  "name": "@sdfc-loans/backend",
+  "scripts": {
+    "dev": "bun run --hot src/index.ts"
+  },
+  "dependencies": {
+    "@sdfc-loans/shared": "workspace:*",
+    "hono": "^4.10.4",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/pg": "^8.15.6"
+  }
 }

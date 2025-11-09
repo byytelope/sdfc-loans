@@ -12,16 +12,16 @@ node_modules/
 coverage/
 
 # --- Next.js ---
-packages/frontend/.next/
-packages/frontend/out/
-packages/frontend/build/
+frontend/.next/
+frontend/out/
+frontend/build/
 
 # --- Backend (Hono/Bun) ---
-packages/backend/dist/
-packages/backend/build/
+backend/dist/
+backend/build/
 
 # --- Shared package ---
-packages/shared/dist/
+shared/dist/
 
 # --- Logs ---
 npm-debug.log*
@@ -47,7 +47,7 @@ temp/
 
 # --- TypeScript ---
 *.tsbuildinfo
-packages/frontend/next-env.d.ts
+frontend/next-env.d.ts
 
 # --- Deployment ---
 .vercel
