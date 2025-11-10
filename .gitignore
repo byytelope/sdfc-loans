@@ -12,16 +12,16 @@ node_modules/
 coverage/
 
 # --- Next.js ---
-frontend/.next/
-frontend/out/
-frontend/build/
+apps/client/.next/
+apps/client/out/
+apps/client/build/
 
 # --- Backend (Hono/Bun) ---
-backend/dist/
-backend/build/
+apps/server/dist/
+apps/server/build/
 
 # --- Shared package ---
-shared/dist/
+packages/shared/dist/
 
 # --- Logs ---
 npm-debug.log*

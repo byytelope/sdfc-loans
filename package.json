@@ -2,13 +2,13 @@
   "name": "sdfc-loans",
   "private": true,
   "workspaces": [
-    "backend",
-    "frontend",
-    "shared"
+    "apps/*",
+    "packages/*"
   ],
   "scripts": {
-    "backend": "bun run --filter '@sdfc-loans/backend' dev",
-    "frontend": "bun run --filter '@sdfc-loans/frontend' dev"
+    "dev": "bun --filter '*' dev",
+    "server": "bun --filter '@sdfc-loans/server' dev",
+    "client": "bun --filter '@sdfc-loans/client' dev"
   },
   "dependencies": {
     "zod": "^4.1.12"
