@@ -65,7 +65,7 @@ loans.post("/", async (c) => {
     const parsed = loanSchema.safeParse(body);
 
     if (!parsed.success) {
-      return c.json(z.treeifyError(parsed.error), 400);
+      return c.json({ error: z.flattenError(parsed.error).fieldErrors }, 400);
     }
 
     const { loanNumber, amount, startDate, endDate, emi } = parsed.data;
@@ -91,7 +91,7 @@ loans.post("/payment", async (c) => {
     const parsed = paymentSchema.safeParse(body);
 
     if (!parsed.success) {
-      return c.json(z.treeifyError(parsed.error), 400);
+      return c.json({ error: z.flattenError(parsed.error).fieldErrors }, 400);
     }
 
     const { amount, loanId } = parsed.data;

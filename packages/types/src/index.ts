@@ -4,6 +4,13 @@ export type User = {
   id: string;
   name: string;
   email: string;
+  isAdmin: boolean;
+};
+
+export type DBUser = {
+  id: string;
+  name: string;
+  email: string;
   passwordHash: string;
   isAdmin: boolean;
   createdAt: Date;

@@ -1,4 +1,4 @@
-import type { User } from "@sdfc-loans/types";
+import type { DBUser } from "@sdfc-loans/types";
 import { Hono } from "hono";
 import { Pool } from "pg";
 import { z } from "zod";
@@ -27,7 +27,7 @@ auth.post("/login", async (c) => {
   if (res.rows.length === 0)
     return c.json({ error: "Invalid credentials" }, 401);
 
-  const user = res.rows[0] as User;
+  const user = res.rows[0] as DBUser;
   const valid = await checkPassword(password, user.passwordHash);
   if (!valid) return c.json({ error: "Invalid credentials" }, 401);
 

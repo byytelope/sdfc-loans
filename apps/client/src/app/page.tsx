@@ -1,3 +1,7 @@
+import { getLoanItems } from "@/lib/actions";
+
 export default async function Home() {
-  return <p className="text-5xl">Yo</p>;
+  const data = await getLoanItems();
+
+  return <div></div>;
 }
