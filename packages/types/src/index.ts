@@ -57,6 +57,7 @@ export type Payment = {
 export const loanSchema = z
   .object({
     loanNumber: z.string().min(1),
+    borrower: z.uuid(),
     amount: z.number().positive(),
     startDate: z.coerce.date(),
     endDate: z.coerce.date(),

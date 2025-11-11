@@ -1,11 +1,19 @@
 import "server-only";
+import type { User } from "@sdfc-loans/types";
 import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
-export async function createSession(token: string) {
+export async function createSession(token: string, user: User) {
   const cookieStore = await cookies();
 
   cookieStore.set("auth_token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+  });
+
+  cookieStore.set("user", JSON.stringify(user), {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
@@ -16,6 +24,7 @@ export async function createSession(token: string) {
 export async function deleteSession() {
   const cookieStore = await cookies();
   cookieStore.delete("auth_token");
+  cookieStore.delete("user");
 }
 
 export async function verifyJwt(token: string) {

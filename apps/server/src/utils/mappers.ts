@@ -1,5 +1,5 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: nah */
-import type { Loan, LoanDetails } from "@sdfc-loans/types";
+import type { Loan, LoanDetails, User } from "@sdfc-loans/types";
 
 export function mapLoanRow(row: any): Loan {
   return {
@@ -29,7 +29,16 @@ export function mapLoanDetails(row: any): LoanDetails {
     createdAt: new Date(row.created_at),
     updatedAt: new Date(row.updated_at),
     totalPaid: parseFloat(row.total_paid),
-    outstanding: parseFloat(row.outstanding_amount),
-    overdue: parseFloat(row.overdue_amount),
+    outstanding: parseFloat(row.outstanding),
+    overdue: parseFloat(row.overdue),
+  };
+}
+
+export function mapUsers(row: any): User {
+  return {
+    id: row.id,
+    name: row.name,
+    email: row.email,
+    isAdmin: row.is_admin,
   };
 }

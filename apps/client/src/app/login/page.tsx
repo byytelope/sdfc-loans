@@ -20,11 +20,14 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
-import { login } from "@/lib/actions";
-import { emptyFormState } from "@/lib/definitions";
+import { loginAction } from "@/lib/actions";
+import { emptyLoginFormState } from "@/lib/definitions";
 
 export default function LoginPage() {
-  const [formState, action, pending] = useActionState(login, emptyFormState);
+  const [formState, action, pending] = useActionState(
+    loginAction,
+    emptyLoginFormState,
+  );
 
   return (
     <div className="flex justify-center items-center min-h-screen">

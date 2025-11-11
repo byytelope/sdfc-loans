@@ -68,12 +68,13 @@ loans.post("/", async (c) => {
       return c.json({ error: z.flattenError(parsed.error).fieldErrors }, 400);
     }
 
-    const { loanNumber, amount, startDate, endDate, emi } = parsed.data;
+    const { loanNumber, borrower, amount, startDate, endDate, emi } =
+      parsed.data;
 
     await pool.query(
-      `INSERT INTO loans (loan_number, amount, start_date, end_date, emi)
-       VALUES ($1, $2, $3, $4, $5)`,
-      [loanNumber, amount, startDate, endDate, emi],
+      `INSERT INTO loans (loan_number, user_id, amount, start_date, end_date, emi)
+       VALUES ($1, $2, $3, $4, $5, $6)`,
+      [loanNumber, borrower, amount, startDate, endDate, emi],
     );
 
     return c.json({ message: "Loan created successfully" }, 201);
