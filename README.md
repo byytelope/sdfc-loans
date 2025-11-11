@@ -59,6 +59,17 @@ To stop it later:
 docker compose down
 ```
 
+## Seeding the Database
+
+A seed file is included at apps/server/seed.sql. You can use it to populate the
+database with initial data (including test users).
+
+After starting the Postgres container, run:
+
+```bash
+cat apps/server/seed.sql | docker exec -i sdfc-db psql -U postgres -d sdfc_db
+```
+
 ## Environment Variables
 
 `apps/client/.env`
@@ -93,3 +104,14 @@ Hono servers.
 ```bash
 bun dev
 ```
+
+## Available Logins
+
+After seeding, you can log in with the following credentials:
+
+| Role  | Email               | Password  |
+| ----- | ------------------- | --------- |
+| Admin | admin@sdfc.com      | admin123  |
+| User  | alice@example.com   | dababy123 |
+| User  | bob@example.com     | dababy123 |
+| User  | charlie@example.com | dababy123 |
