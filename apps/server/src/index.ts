@@ -4,12 +4,14 @@ import { logger } from "hono/logger";
 
 import { auth } from "./routes/auth";
 import { loans } from "./routes/loans";
+import { payments } from "./routes/payments";
 import { users } from "./routes/users";
 
 const app = new Hono({ strict: false });
 const v1 = new Hono();
 
 v1.route("/loans", loans);
+v1.route("/payments", payments);
 v1.route("/users", users);
 v1.route("/", auth);
 

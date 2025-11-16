@@ -1,6 +1,6 @@
 import { BanknoteXIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { CreateLoanDialog } from "@/components/create-loan-dialog";
 import {
   Empty,
   EmptyContent,
@@ -10,7 +10,7 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 
-export const EmptyLoans = () => {
+export const EmptyLoans = ({ isAdmin }: { isAdmin: boolean }) => {
   return (
     <Empty>
       <EmptyHeader>
@@ -22,12 +22,11 @@ export const EmptyLoans = () => {
           {"You have no loans that are active."}
         </EmptyDescription>
       </EmptyHeader>
-      <EmptyContent>
-        <div className="flex gap-2">
-          <Button>Add Loan</Button>
-          <Button>Log Out</Button>
-        </div>
-      </EmptyContent>
+      {isAdmin && (
+        <EmptyContent>
+          <CreateLoanDialog />
+        </EmptyContent>
+      )}
     </Empty>
   );
 };

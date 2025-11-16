@@ -1,13 +1,35 @@
-import type { loanSchema, paymentSchema } from "@sdfc-loans/types";
-import { z } from "zod";
+import type {
+  loanSchema,
+  loginSchema,
+  paymentSchema,
+  signUpSchema,
+} from "@sdfc-loans/types";
+import type { z } from "zod";
 import type { $ZodFlattenedError } from "zod/v4/core";
+
+const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+export type Result<T> =
+  | { success: true; data: T }
+  | { success: false; error: string };
 
 export const emptyLoginFormState: LoginFormState = {
   values: {
     email: "",
     password: "",
   },
-  errors: null,
+  errors: {},
+  success: true,
+};
+
+export const emptySignUpFormState: SignUpFormState = {
+  values: {
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  },
+  errors: {},
   success: true,
 };
 
@@ -16,11 +38,15 @@ export const emptyLoanFormState: LoanFormState = {
     amount: 0,
     borrower: "",
     emi: 0,
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: new Date().toLocaleDateString("en-CA", { timeZone: tz }),
+    endDate: (() => {
+      const d = new Date();
+      d.setFullYear(d.getFullYear() + 1);
+      return d.toLocaleDateString("en-CA", { timeZone: tz });
+    })(),
     loanNumber: "",
   },
-  errors: null,
+  errors: {},
   success: true,
 };
 
@@ -29,43 +55,50 @@ export const emptyPaymentFormState: PaymentFormState = {
     loanId: "",
     amount: 0,
   },
-  errors: null,
+  errors: {},
   success: true,
 };
 
-export const loginSchema = z.object({
-  email: z.email(),
-  password: z.string(),
-});
-
 export type LoginFormState = {
-  values: z.infer<typeof loginSchema>;
-  errors: null | $ZodFlattenedError<z.infer<typeof loginSchema>>["fieldErrors"];
+  values: LoginBody;
+  errors: {
+    server?: string;
+    form?: $ZodFlattenedError<LoginBody>["fieldErrors"];
+  };
+  success: boolean;
+};
+
+export type SignUpFormState = {
+  values: SignUpBody;
+  errors: {
+    server?: string;
+    form?: $ZodFlattenedError<SignUpBody>["fieldErrors"];
+  };
   success: boolean;
 };
 
 export type LoanFormState = {
-  values: z.infer<typeof loanSchema>;
-  errors: null | $ZodFlattenedError<z.infer<typeof loanSchema>>["fieldErrors"];
+  values: Omit<LoanItemBody, "startDate" | "endDate"> & {
+    startDate: string;
+    endDate: string;
+  };
+  errors: {
+    server?: string;
+    form?: $ZodFlattenedError<LoanItemBody>["fieldErrors"];
+  };
   success: boolean;
 };
 
 export type PaymentFormState = {
-  values: z.infer<typeof paymentSchema>;
-  errors:
-    | null
-    | $ZodFlattenedError<z.infer<typeof paymentSchema>>["fieldErrors"];
+  values: PaymentBody;
+  errors: {
+    server?: string;
+    form?: $ZodFlattenedError<PaymentBody>["fieldErrors"];
+  };
   success: boolean;
 };
 
 export type PaymentBody = z.infer<typeof paymentSchema>;
-export type CreatePaymentRes =
-  | { message: string }
-  | { error: string }
-  | { error: $ZodFlattenedError<PaymentBody>["fieldErrors"] };
-
 export type LoanItemBody = z.infer<typeof loanSchema>;
-export type CreateLoanRes =
-  | { message: string }
-  | { error: string }
-  | { error: $ZodFlattenedError<LoanItemBody>["fieldErrors"] };
+export type LoginBody = z.infer<typeof loginSchema>;
+export type SignUpBody = z.infer<typeof signUpSchema>;

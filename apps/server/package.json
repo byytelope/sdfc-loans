@@ -5,7 +5,7 @@
   },
   "dependencies": {
     "@sdfc-loans/types": "workspace:*",
-    "hono": "^4.10.4",
+    "hono": "^4.10.6",
     "pg": "^8.16.3"
   },
   "devDependencies": {

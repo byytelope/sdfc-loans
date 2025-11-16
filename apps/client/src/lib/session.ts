@@ -8,14 +8,14 @@ export async function createSession(token: string, user: User) {
 
   cookieStore.set("auth_token", token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: false,
     sameSite: "lax",
     path: "/",
   });
 
   cookieStore.set("user", JSON.stringify(user), {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: false,
     sameSite: "lax",
     path: "/",
   });

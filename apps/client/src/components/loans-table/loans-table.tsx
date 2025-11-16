@@ -2,7 +2,9 @@
 
 import type { LoanDetails } from "@sdfc-loans/types";
 
-import { Button } from "@/components/ui/button";
+import { CreateLoanDialog } from "@/components/create-loan-dialog";
+import { CreatePaymentDialog } from "@/components/create-payment-dialog";
+import { DeleteLoanAlert } from "@/components/delete-loan-alert";
 import {
   Table,
   TableBody,
@@ -12,7 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { currency } from "@/lib/utils";
-import { CreateLoanDialog } from "./create-loan-dialog";
+import { LoanStatus } from "./loan-status";
 
 export const LoansTable = ({
   isAdmin,
@@ -23,10 +25,11 @@ export const LoansTable = ({
 }) => {
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex gap-2 w-full justify-end">
-        {isAdmin && <CreateLoanDialog />}
-        <Button>Record Payment</Button>
-      </div>
+      {isAdmin && (
+        <div className="flex gap-2 w-full justify-end">
+          <CreateLoanDialog />
+        </div>
+      )}
       <Table>
         <TableHeader>
           <TableRow>
@@ -40,6 +43,7 @@ export const LoansTable = ({
             <TableHead className="text-right">Total Paid</TableHead>
             <TableHead className="text-right">Outstanding</TableHead>
             <TableHead className="text-right">Overdue</TableHead>
+            <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -66,6 +70,10 @@ export const LoansTable = ({
               </TableCell>
               <TableCell className="text-right">
                 {currency.format(loan.overdue)}
+              </TableCell>
+              <TableCell className="text-center flex justify-end gap-2">
+                <CreatePaymentDialog loanId={loan.id} loanItems={loanItems} />
+                {isAdmin && <DeleteLoanAlert loan={loan} />}
               </TableCell>
             </TableRow>
           ))}

@@ -15,13 +15,14 @@ runtime.
 Make sure the following are installed on your system:
 
 - [**Bun**](https://bun.sh)
+- [**Node.js**](https://nodejs.org)
 - **Docker** and **Docker Compose**
 
 ## Clone the Repository
 
 ```bash
-git clone <repo-url>
-cd <repo-name>
+git clone git@github.com:byytelope/sdfc-loans.git
+cd sdfc-loans
 ```
 
 ## Setup the Database
@@ -51,7 +52,7 @@ Then start the database with:
 docker compose up -d
 ```
 
-Your Postgres database will now be available at localhost:5432.
+Your Postgres database will now be available at `localhost:5432`.
 
 To stop it later:
 
@@ -59,15 +60,22 @@ To stop it later:
 docker compose down
 ```
 
-## Seeding the Database
+## Initializing and Seeding the Database
 
-A seed file is included at apps/server/seed.sql. You can use it to populate the
-database with initial data (including test users).
+SQL files for database initialization [init.sql](apps/server/migrations/init.sql) and data seeding [seed.sql](apps/server/migrations/seed.sql) are located in `apps/server/migrations/`.
 
-After starting the Postgres container, run:
+After starting the Postgres container, you must run these files in order to first create the tables and then populate them with data.
+
+**1. Initialize the Database Schema:** This command runs `init.sql` to create all the necessary tables.
 
 ```bash
-cat apps/server/seed.sql | docker exec -i sdfc-db psql -U postgres -d sdfc_db
+cat apps/server/migrations/init.sql | docker exec -i sdfc-db psql -U postgres -d sdfc_db
+```
+
+**2. Initialize the Database Schema:** This command runs `seed.sql` to populate the tables with initial data (including test users).
+
+```bash
+cat apps/server/migrations/seed.sql | docker exec -i sdfc-db psql -U postgres -d sdfc_db
 ```
 
 ## Environment Variables
@@ -105,9 +113,11 @@ Hono servers.
 bun dev
 ```
 
+Now visit [localhost:3000](http://localhost:3000) to access the web client.
+
 ## Available Logins
 
-After seeding, you can log in with the following credentials:
+After seeding, you can log in with the following credentials (or create your own accounts from [/signup](http://localhost:3000/signup)):
 
 | Role  | Email               | Password  |
 | ----- | ------------------- | --------- |

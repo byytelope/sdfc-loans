@@ -1,5 +1,27 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: nah */
-import type { Loan, LoanDetails, User } from "@sdfc-loans/types";
+import type {
+  Loan,
+  LoanDetails,
+  PaymentDetails,
+  User,
+} from "@sdfc-loans/types";
+
+export function mapPayments(row: any): PaymentDetails {
+  return {
+    id: row.id,
+    loanId: row.loan_id,
+    loanNumber: row.loan_number,
+    recorderId: row.recorder_id,
+    recorderName: row.recorder_name,
+    recorderEmail: row.recorder_email,
+    borrowerId: row.borrower_id,
+    borrowerName: row.borrower_name,
+    borrowerEmail: row.borrower_email,
+    paymentDate: row.payment_date,
+    amount: row.amount,
+    createdAt: row.created_at,
+  };
+}
 
 export function mapLoanRow(row: any): Loan {
   return {

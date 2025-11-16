@@ -7,8 +7,8 @@
   ],
   "scripts": {
     "dev": "bun --filter '*' dev",
-    "server": "bun --filter '@sdfc-loans/server' dev",
-    "client": "bun --filter '@sdfc-loans/client' dev"
+    "dev:server": "bun --filter '@sdfc-loans/server' dev",
+    "dev:client": "bun --filter '@sdfc-loans/client' dev"
   },
   "dependencies": {
     "zod": "^4.1.12"

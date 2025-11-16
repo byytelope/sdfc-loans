@@ -30,40 +30,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createLoanAction, getAllUsers } from "@/lib/actions";
-import type { LoanItemBody } from "@/lib/definitions";
-
-type LoanFormState = {
-  values: LoanItemBody;
-  errors: null | Record<string, string[]>;
-  success: boolean;
-};
-
-const emptyLoanState: LoanFormState = {
-  values: {} as LoanItemBody,
-  errors: null,
-  success: true,
-};
+import { createLoanFormAction, getUsers } from "@/lib/actions";
+import { emptyLoanFormState } from "@/lib/definitions";
 
 export const CreateLoanDialog = () => {
   const [formState, action, pending] = useActionState(
-    createLoanAction,
-    emptyLoanState,
+    createLoanFormAction,
+    emptyLoanFormState,
   );
-
+  const [open, setOpen] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
   const [selectedBorrower, setSelectedBorrower] = useState<string | undefined>(
     formState.values.borrower,
   );
 
-  const [open, setOpen] = useState(false);
-
   useEffect(() => {
     let mounted = true;
     (async () => {
       try {
-        const res = await getAllUsers();
-        if (mounted) setUsers(res ?? []);
+        const res = await getUsers();
+        if (mounted) setUsers(res.success ? res.data : []);
       } catch (err) {
         console.error("Failed to load users", err);
       }
@@ -77,10 +63,16 @@ export const CreateLoanDialog = () => {
     setSelectedBorrower(formState.values.borrower);
   }, [formState.values.borrower]);
 
+  useEffect(() => {
+    if (formState.success) {
+      setOpen(false);
+    }
+  }, [formState.success]);
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">
+        <Button>
           <PlusIcon />
           Create Loan
         </Button>
@@ -88,13 +80,19 @@ export const CreateLoanDialog = () => {
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create loan</DialogTitle>
+          <DialogTitle>Create Loan</DialogTitle>
           <DialogDescription>Add a new loan</DialogDescription>
         </DialogHeader>
 
+        {formState.errors?.server && (
+          <div className="mb-4">
+            <FieldError>{formState.errors.server}</FieldError>
+          </div>
+        )}
+
         <Form action={action} id="create-loan-form">
           <FieldGroup>
-            <Field data-invalid={!!formState.errors?.loanNumber?.length}>
+            <Field data-invalid={!!formState.errors?.form?.loanNumber?.length}>
               <FieldLabel htmlFor="loanNumber">Loan Number</FieldLabel>
               <Input
                 id="loanNumber"
@@ -102,12 +100,11 @@ export const CreateLoanDialog = () => {
                 defaultValue={formState.values.loanNumber}
                 disabled={pending}
               />
-              {formState.errors?.loanNumber && (
-                <FieldError>{formState.errors.loanNumber[0]}</FieldError>
+              {formState.errors?.form?.loanNumber && (
+                <FieldError>{formState.errors.form.loanNumber[0]}</FieldError>
               )}
             </Field>
-
-            <Field data-invalid={!!formState.errors?.borrower?.length}>
+            <Field data-invalid={!!formState.errors?.form?.borrower?.length}>
               <FieldLabel htmlFor="borrower">Borrower</FieldLabel>
               <Select
                 value={selectedBorrower}
@@ -133,12 +130,15 @@ export const CreateLoanDialog = () => {
                 value={selectedBorrower ?? ""}
               />
 
-              {formState.errors?.borrower && (
-                <FieldError>{formState.errors.borrower[0]}</FieldError>
+              {formState.errors?.form?.borrower && (
+                <FieldError>{formState.errors.form.borrower[0]}</FieldError>
               )}
             </Field>
 
-            <Field data-invalid={!!formState.errors?.amount?.length}>
+            <Field
+              data-invalid={!!formState.errors?.form?.amount?.length}
+              orientation="responsive"
+            >
               <FieldLabel htmlFor="amount">Amount</FieldLabel>
               <Input
                 id="amount"
@@ -148,12 +148,15 @@ export const CreateLoanDialog = () => {
                 disabled={pending}
                 placeholder="0.00"
               />
-              {formState.errors?.amount && (
-                <FieldError>{formState.errors.amount[0]}</FieldError>
+              {formState.errors?.form?.amount && (
+                <FieldError>{formState.errors.form.amount[0]}</FieldError>
               )}
             </Field>
 
-            <Field data-invalid={!!formState.errors?.emi?.length}>
+            <Field
+              data-invalid={!!formState.errors?.form?.emi?.length}
+              orientation="responsive"
+            >
               <FieldLabel htmlFor="emi">EMI</FieldLabel>
               <Input
                 id="emi"
@@ -163,34 +166,43 @@ export const CreateLoanDialog = () => {
                 disabled={pending}
                 placeholder="0.00"
               />
-              {formState.errors?.emi && (
-                <FieldError>{formState.errors.emi[0]}</FieldError>
+              {formState.errors?.form?.emi && (
+                <FieldError>{formState.errors.form.emi[0]}</FieldError>
               )}
             </Field>
 
-            <Field data-invalid={!!formState.errors?.startDate?.length}>
+            <Field
+              data-invalid={!!formState.errors?.form?.startDate?.length}
+              orientation="responsive"
+            >
               <FieldLabel htmlFor="startDate">Start Date</FieldLabel>
               <Input
                 id="startDate"
                 name="startDate"
-                disabled={pending}
                 type="date"
+                disabled={pending}
+                defaultValue={formState.values.startDate}
               />
-              {formState.errors?.startDate && (
-                <FieldError>{formState.errors.startDate[0]}</FieldError>
+
+              {formState.errors?.form?.startDate && (
+                <FieldError>{formState.errors.form.startDate[0]}</FieldError>
               )}
             </Field>
 
-            <Field data-invalid={!!formState.errors?.endDate?.length}>
+            <Field
+              data-invalid={!!formState.errors?.form?.endDate?.length}
+              orientation="responsive"
+            >
               <FieldLabel htmlFor="endDate">End Date</FieldLabel>
               <Input
                 id="endDate"
                 name="endDate"
-                disabled={pending}
                 type="date"
+                disabled={pending}
+                defaultValue={formState.values.endDate}
               />
-              {formState.errors?.endDate && (
-                <FieldError>{formState.errors.endDate[0]}</FieldError>
+              {formState.errors?.form?.endDate && (
+                <FieldError>{formState.errors.form.endDate[0]}</FieldError>
               )}
             </Field>
           </FieldGroup>
